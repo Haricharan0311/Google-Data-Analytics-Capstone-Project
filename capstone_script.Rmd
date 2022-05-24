@@ -1,0 +1,95 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+## We load the dataset which was cleaned using python for analysis using R
+
+
+```{r}
+dataset_dist<-read.csv("D:\\datset_cap\\cyclistic_final.csv")
+```
+
+
+```{r}
+summary(dataset_dist)
+```
+We plot a graph to show us the distribution between casuals and members subscribed to Cyclistic
+Observation I
+```{r}
+ggplot(dataset_dist, aes(member_casual, fill=member_casual)) +
+  geom_bar() +
+  labs(x="Casuals x Members", title="Chart 01 - Casuals x Members distribution")
+```
+We see that Members have a frequency count greater than that of Casuals and thus focusing our targeted advertisements ob members would be a wise strategy(1)
+We see a difference of almost ~19% which is significantly large
+
+
+We extract the station names which are most frequently used
+Observation II
+```{r}
+ex<-table(dataset_dist['start_station_name'],useNA="ifany")
+ex_2<-table(dataset_dist['end_station_name'],useNA="ifany")
+```
+
+```{r}
+View(ex)
+ex<-ex[-c(1)]
+max(ex)
+```
+```{r}
+ex_2<-ex_2[-c(1)]
+max(ex_2)
+View(ex_2)
+```
+The results point to the fact that 
+start_station_names
+Streeter Dr & Grand Ave
+frequency-35366
+Clark St & Elm St
+frequency-31969
+
+end_station_names
+Streeter Dr & Grand Ave
+frequency-37766
+Theater on the Lake
+frequency-31058
+
+From the above data we can conclude that most of the riders who start end up returning their bikes at the same station and the most famous station is Streeter Dr & Grand Ave
+Therefore targeted or more advertisement budget in that area or promotional schemes in tht area would be very beneficial
+
+We try finding The distribution by months for casual and member users
+Observation III
+```{r}
+dataset_dist %>%
+  ggplot(aes(start_month, fill=member_casual)) +
+  geom_bar() +
+  labs(x="Month", title="Chart 02 - Distribution by month") +
+  coord_flip()
+```
+We notice that as we progress to the middle of the year the members take up a major portion of the bike rents.Some logical thought behind this would get us to the reason being  Chicago has summer during the mid year being a part of the northern Hemisphere and thus we can correlate the fact that summer time leads to more of the members using the bikes
+
+
+
+
+Observe the distribution according to weekday for casual and member users
+Observation IV
+```{r}
+ggplot(dataset_dist, aes(weekday_name, fill=member_casual)) +
+    geom_bar() +
+    labs(x="Weekday", title="Chart 03 - Distribution by weekday") +
+    coord_flip()
+```
+We notice that Friday and Saturday have a major increase in throughput for Members and in the contrary Sunday has a slump for members and a high for Casuals
+
+Observe the distribution of bike type over weekdays for both casual and member users
+Observation V
+```{r}
+ggplot(dataset_dist, aes(weekday_name, fill=rideable_type)) +
+    geom_bar() +
+    labs(x="Weekday", title="Chart 04 - Ride_ Type Distribution by weekday") +
+    coord_flip()+facet_wrap(~member_casual)
+```
+A clear observation that can be made from these charts is that Docked bikes are the most popular
+
